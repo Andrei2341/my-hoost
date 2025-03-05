@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прощай телефончик</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Стили для фона с текстом "scam" */
+        .scam-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: red;
+            font-size: 200px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            opacity: 0.1;
+        }
+
+        /* Основной контент на переднем плане */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+        }
+
+        /* Стили для таймера */
+        .timer {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            color: red;
+            font-weight: bold;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фон с текстом "scam" -->
+    <div class="scam-background">
+        scam
+    </div>
+
+    <!-- Основное сообщение на переднем плане -->
+    <div class="overlay">
+        <div class="message">Прощай телефончик, твои данные SMS, IMEI, Пароли у меня </br>У ТЕБЯ 3 МИНУТЫ ДО ЗАГРУЗКИ ВИРУСА</div>
+    </div>
+
+    <!-- Таймер -->
+    <div id="timer" class="timer">03:00</div>
+
+    <script>
+        // Устанавливаем начальное время (3 минуты)
+        let timeLeft = 180; // 3 минуты = 180 секунд
+
+        // Функция для обновления таймера
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+
+            // Форматируем минуты и секунды в "MM:SS"
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            // Обновляем элемент с таймером
+            document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+
+            // Если время закончилось
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById("timer").textContent = "Время истекло!";
+            } else {
+                // Уменьшаем оставшееся время на 1 секунду
+                timeLeft--;
+            }
+        }
+
+        // Запускаем таймер, обновляем каждую секунду
+        let timerInterval = setInterval(updateTimer, 1000);
+
+        // Блокируем возможность закрыть страницу на 5 минут
+        setTimeout(function() {
+            alert("Прошло 5 минут, теперь можно выйти.");
+            window.location.href = "about:blank"; // Чтобы избежать закрытия
+        }, 300000); // 5 минут = 300000 миллисекунд
+
+        // Отключаем возможность использовать "назад" или обновление
+        window.onbeforeunload = function() {
+            return "Вы не можете выйти с этого сайта прямо сейчас!";
+        };
+    </script>
+
+</body>
+</html>
